@@ -18,6 +18,8 @@ node_modules/
 
 # MCP config (contém tokens)
 .mcp.json
+.setting/
+.setting.*/
 
 # Python / IDE / temporários
 .venv/
