@@ -118,20 +118,6 @@ export interface Service {
   status: 'ativo' | 'inativo';
 }
 
-export interface Product {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  price: number;
-  cost: number;
-  stock: number;
-  stockMin: number;
-  supplierId?: string;
-  supplierName?: string;
-  status: 'ativo' | 'inativo';
-}
-
 export interface ServicePackage {
   id: string;
   name: string;
@@ -356,53 +342,8 @@ export interface BurialRecord {
 }
 
 // ==================== ESTOQUE ====================
-export interface StockMovement {
-  id: string;
-  productId: string;
-  productName: string;
-  type: 'entrada' | 'saida' | 'ajuste';
-  quantity: number;
-  unitCost: number;
-  totalCost: number;
-  reason: string;
-  userId: string;
-  userName: string;
-  createdAt: string;
-}
-
-export interface Supplier {
-  id: string;
-  name: string;
-  cnpj: string;
-  contactName: string;
-  phone: string;
-  email: string;
-  address: string;
-  paymentTerms: string;
-  status: 'ativo' | 'inativo';
-}
-
-export interface PurchaseOrder {
-  id: string;
-  supplierId: string;
-  supplierName: string;
-  orderDate: string;
-  expectedDelivery: string;
-  totalValue: number;
-  status: 'pendente' | 'parcial' | 'recebido' | 'cancelado';
-  receivedAt?: string;
-  items: PurchaseOrderItem[];
-}
-
-export interface PurchaseOrderItem {
-  id: string;
-  orderId: string;
-  productId: string;
-  productName: string;
-  quantity: number;
-  unitPrice: number;
-  subtotal: number;
-}
+// Tipos de estoque foram centralizados em lib/EstoqueStore.tsx
+// (ProdutoEstoque, FornecedorEstoque, MovimentacaoEstoque, etc.)
 
 // ==================== DOCUMENTAÇÃO ====================
 export interface DocumentTemplate {

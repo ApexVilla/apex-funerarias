@@ -1,0 +1,28 @@
+
+# Build output
+dist/
+backend-php/.env
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+# MCP config (contém tokens)
+.mcp.json
+
+# Python / IDE / temporários
+.venv/
+__pycache__/
+.cursor/
+scratch/
+tsc_errors.*
+*.apk

@@ -1,46 +1,152 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sistema de Planos</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: {
-                DEFAULT: '#2563eb',
-                dark: '#1e40af',
-                light: '#3b82f6',
-              },
-              sidebar: '#1e293b',
-              background: '#f8fafc',
-            }
-          }
-        }
-      }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-      body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-    </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
-    "react-router-dom": "https://esm.sh/react-router-dom@^7.13.0"
-  }
-}
-</script>
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apex-Plan</title>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <!-- Estilos críticos antes do JS — reduz piscamento e aviso de layout forçado no Firefox -->
+  <style>
+    html {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      margin: 0;
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    html.dark body {
+      background-color: #0f172a;
+      color: #e2e8f0;
+    }
+    #root {
+      min-height: 100vh;
+    }
+    .initial-spinner-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      min-height: 100vh;
+      background-color: #f8fafc;
+      color: #4a4a4a;
+    }
+    html.dark .initial-spinner-container {
+      background-color: #0f172a;
+      color: #cbd5e1;
+    }
+    .initial-spinner {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      border: 4px solid #0000;
+      border-radius: 50%;
+      border-right-color: #299fff;
+      animation: initial-tri-spinner 1s infinite linear;
+    }
+    .initial-spinner::before,
+    .initial-spinner::after {
+      content: "";
+      grid-area: 1/1;
+      margin: 2px;
+      border: inherit;
+      border-radius: 50%;
+      animation: initial-tri-spinner 2s infinite;
+    }
+    .initial-spinner::before {
+      border-right-color: #10b981;
+    }
+    .initial-spinner::after {
+      margin: 8px;
+      border-right-color: #eab308;
+      animation-duration: 3s;
+    }
+    @keyframes initial-tri-spinner {
+      100% {
+        transform: rotate(1turn);
+      }
+    }
+    .initial-loader {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      font-weight: 500;
+      font-size: 22px;
+      box-sizing: content-box;
+      height: 36px;
+      padding: 4px 10px;
+      display: flex;
+      align-items: center;
+      border-radius: 8px;
+    }
+    .initial-loader-words {
+      overflow: hidden;
+      height: 36px;
+    }
+    .initial-loader-word {
+      display: block;
+      height: 100%;
+      padding-left: 6px;
+      color: #299fff;
+      animation: initial-cycle-words 5s infinite;
+    }
+    html.dark .initial-loader-word {
+      color: #60a5fa;
+    }
+    @keyframes initial-cycle-words {
+      10% { transform: translateY(-105%); }
+      25% { transform: translateY(-100%); }
+      35% { transform: translateY(-205%); }
+      50% { transform: translateY(-200%); }
+      60% { transform: translateY(-305%); }
+      75% { transform: translateY(-300%); }
+      85% { transform: translateY(-405%); }
+      100% { transform: translateY(-400%); }
+    }
+  </style>
+  <script>
+    (function applyStoredAppearanceEarly() {
+      try {
+        var accent = localStorage.getItem('fenix_accent') || '#2563eb';
+        var theme = localStorage.getItem('fenix_theme') || 'light';
+        function darkenHex(hex, amount) {
+          var clean = hex.replace('#', '');
+          var r = Math.max(0, parseInt(clean.slice(0, 2), 16) - amount);
+          var g = Math.max(0, parseInt(clean.slice(2, 4), 16) - amount);
+          var b = Math.max(0, parseInt(clean.slice(4, 6), 16) - amount);
+          return '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        }
+        document.documentElement.style.setProperty('--accent-color', accent);
+        document.documentElement.style.setProperty('--accent-color-hover', accent);
+        document.documentElement.style.setProperty('--sidebar-bg', darkenHex(accent, 60));
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) { /* localStorage indisponível */ }
+    })();
+  </script>
 </head>
-  <body>
-    <div id="root"></div>
+
+<body>
+  <div id="root">
+    <div class="initial-spinner-container">
+      <div class="initial-spinner"></div>
+      <div class="initial-loader">
+        <span>Carregando</span>
+        <div class="initial-loader-words">
+          <span class="initial-loader-word">Planos</span>
+          <span class="initial-loader-word">Clientes</span>
+          <span class="initial-loader-word">Financeiro</span>
+          <span class="initial-loader-word">Contratos</span>
+          <span class="initial-loader-word">Planos</span>
+        </div>
+      </div>
+    </div>
+  </div>
   <script type="module" src="/index.tsx"></script>
 </body>
+
 </html>
